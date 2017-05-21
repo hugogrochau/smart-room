@@ -15,7 +15,7 @@ class App extends Component {
   componentDidMount() {
     const client = mqtt.connect('mqtt://test.mosca.io');
     client.on('connect', () => {
-      client.subscribe('hugogrochau/smart-home');
+      client.subscribe('hugogrochau/smart-home/temperature');
     });
 
     client.on('message', (topic, message) => {
