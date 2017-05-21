@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/hugogrochau/smart-room#readme",
   "dependencies": {
+    "mqtt": "^2.7.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
