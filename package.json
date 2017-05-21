@@ -1,0 +1,35 @@
+{
+  "name": "smart-room",
+  "description": "A platform for monitoring and controlling a set of ESP8266 devices deployed in a room",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugogrochau/smart-room.git"
+  },
+  "keywords": [
+    "nodemcu",
+    "mqtt",
+    "iot",
+    "smart",
+    "room"
+  ],
+  "author": "Hugo Grochau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hugogrochau/smart-room/issues"
+  },
+  "homepage": "https://github.com/hugogrochau/smart-room#readme",
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
