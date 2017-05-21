@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import mqtt from 'mqtt';
-import logo from './logo.svg';
+import { BASE_TOPIC, METHOD_REGEX } from './constants';
 import './App.css';
 
 class App extends Component {
@@ -8,32 +8,61 @@ class App extends Component {
     super(props);
 
     this.state = {
-      message: '',
+      sensors: [],
     };
+  }
+
+  publishMessage = (client, method, message) => {
+    console.log(`[Sent] Method: ${method} | Message: ${message}`);
+    client.publish(`${BASE_TOPIC}/${method}`, message);
+  }
+
+  handleMessage = (client) => (topic, message) => {
+    // match method
+    const method = topic.match(METHOD_REGEX)[1];
+    const parsedMessage = JSON.parse(message);
+    console.log(`[Received] Method: ${method} | Message:`, parsedMessage);
+
+    switch (method) {
+      // receive update from a sensor
+      case 'update':
+        const { id } = parsedMessage;
+        const sensors = this.state.sensors.slice();
+        sensors[id] = { ...parsedMessage };
+        this.setState({ sensors });
+        break;
+      // a new sensor requests to be registered
+      case 'requestRegistration':
+        const { key } = parsedMessage;
+        const numberOfSensors = this.state.sensors.length;
+        // give its id
+        this.publishMessage(client, 'acceptRegistration', `${key} ${numberOfSensors}`);
+      break;
+      default:
+    }
   }
 
   componentDidMount() {
     const client = mqtt.connect('mqtt://test.mosca.io');
     client.on('connect', () => {
-      client.subscribe('hugogrochau/smart-room/temperature');
+      client.subscribe(`${BASE_TOPIC}/update`);
+      client.subscribe(`${BASE_TOPIC}/requestRegistration`);
     });
 
-    client.on('message', (topic, message) => {
-      this.setState({ message: message.toString() });
-    });
+    client.on('message', this.handleMessage(client));
   }
   
   render() {
-    const { message } = this.state;
+    const { sensors } = this.state;
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>{message}</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <ul>
+          {sensors.map(sensor => 
+            <li key={sensor.id}>
+              {`${sensor.position}: ${sensor.temperature}`}
+            </li>
+          )}
+        </ul>
       </div>
     );
   }
