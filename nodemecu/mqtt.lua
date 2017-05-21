@@ -1,12 +1,12 @@
 local m = mqtt.Client("hugo", 120)
 
-function publishTemp(c)
+function publishTemperature(c)
   local temperature = adc.read(0)*(3.3/10.24)
-  c:publish("hugogrochau/smart-home/temperature", temperature,0,0, 
+  c:publish("hugogrochau/smart-room/temperature", temperature, 0, 0, 
             function(client) print("sent temperature") end)
 end
 
-function controlSubscription (c)
+function controlSubscription(c)
   local msgsrec = 0
   function newMessage (c, t, m)
     print ("message ".. msgsrec .. ", topic: ".. t .. ", data: " .. m)
@@ -15,9 +15,11 @@ function controlSubscription (c)
   c:on("message", newMessage)
 end
 
-function connected (c)
-  publishTemp(c)
-  c:subscribe("hugogrochau/smart-home/control", 0, controlSubscription)
+function connected(c)
+  c:subscribe("hugogrochau/smart-room/control", 0, controlSubscription)
+  local timer = tmr.create()
+  timer:register(1000, tmr.ALARM_AUTO, function() publishTemperature(c) end)
+  timer:start()
 end 
 
 m:connect("test.mosca.io", 1883, 0, 
