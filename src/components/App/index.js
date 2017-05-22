@@ -10,8 +10,22 @@ class App extends Component {
 
     this.state = {
       sensors: [
-        { temperature: 34, position: 0, id: 0 },
-        { temperature: 32, position: 1, id: 1 }
+        { temperature: 34, position: 0,  id: 0  },
+        { temperature: 34, position: 1,  id: 1  },
+        { temperature: 34, position: 2,  id: 2  },
+        { temperature: 34, position: 3,  id: 3  },
+        { temperature: 34, position: 4,  id: 4  },
+        { temperature: 34, position: 5,  id: 5  },
+        { temperature: 32, position: 6,  id: 6  },
+        { temperature: 32, position: 7,  id: 7  },
+        { temperature: 34, position: 8,  id: 8  },
+        { temperature: 34, position: 9,  id: 9  },
+        { temperature: 34, position: 10, id: 10 },
+        { temperature: 32, position: 11, id: 11 },
+        { temperature: 32, position: 12, id: 12 },
+        { temperature: 34, position: 13, id: 13 },
+        { temperature: 34, position: 14, id: 14 },
+        { temperature: 34, position: 15, id: 15 },
       ],
     };
   }
