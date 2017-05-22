@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import sensorImage from './sensor.jpg';
 import './Sensor.css';
 
 class Sensor extends Component {
@@ -15,7 +16,7 @@ class Sensor extends Component {
     const { temperature, marginLeft, marginTop } = this.props;
 
     return (
-      <div className="Sensor" style={{ marginLeft , marginTop }}>
+      <div className="Sensor" style={{ marginLeft , marginTop, backgroundImage: `url(${sensorImage}` }}>
         {temperature}
       </div>
     );

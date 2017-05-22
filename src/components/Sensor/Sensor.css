@@ -1,9 +1,14 @@
 .Sensor {
+  color: red;
+
+  background-repeat: no-repeat;
+  background-size: 70px 70px;
+
   left: 50%;
   top: 50%;
 
   line-height: 70px;
-  text-align: center;
+  text-align: left;
 
   position: absolute;
 
