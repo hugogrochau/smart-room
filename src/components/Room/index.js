@@ -9,6 +9,7 @@ import './Room.css';
 
 class Room extends Component {
   static propTypes = {
+    showHeatMap: PropTypes.bool,
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
       id: PropTypes.number.isRequired,
       temperature: PropTypes.number.isRequired
@@ -24,11 +25,14 @@ class Room extends Component {
   }
 
   drawHeatMap = () => {
+    const { showHeatMap, sensors } = this.props;
     this.heatMap.clear();
-    this.props.sensors.forEach(sensor => {
-      const positions = positionMap[sensor.position];
-      this.heatMap.add([(positions.left + 320) / 1.9, (positions.top + 400) / 5, sensor.temperature]);
-    });
+    if (showHeatMap) {
+      sensors.forEach(sensor => {
+        const positions = positionMap[sensor.position];
+        this.heatMap.add([(positions.left + 320) / 1.9, (positions.top + 400) / 5, sensor.temperature]);
+      });
+    }
     this.heatMap.radius(30, 100);
     this.heatMap.draw();
   }

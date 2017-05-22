@@ -1,0 +1,17 @@
+.Controls {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  width: 200px;
+  height: 400px;
+
+  background-color: white;
+  border: 1px black solid;
+
+  padding: 20px;
+  margin-left: -600px;
+  margin-top: -200px;
+
+  z-index: 3;
+}

@@ -4,11 +4,14 @@ import { BASE_TOPIC, METHOD_REGEX } from '../../constants';
 
 import Room from '../Room';
 
+import './App.css';
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      showHeatMap: false,
       sensors: [
         { temperature: 34, position: 0,  id: 0  },
         { temperature: 34, position: 1,  id: 1  },
@@ -60,6 +63,10 @@ class App extends Component {
     }
   }
 
+  handleShowHeatMapChange = (event) => {
+    this.setState({showHeatMap: !this.state.showHeatMap});
+  }
+
   componentDidMount() {
     const client = mqtt.connect('mqtt://test.mosca.io');
     client.on('connect', () => {
@@ -71,10 +78,14 @@ class App extends Component {
   }
   
   render() {
-    const { sensors } = this.state;
+    const { sensors, showHeatMap } = this.state;
     return (
       <div className="App">
-        <Room sensors={sensors} />
+        <div className="Controls">
+          <label htmlFor="ShowHeatMap">Show heatmap</label>
+          <input id="ShowHeatMap" type="checkbox" onChange={this.handleShowHeatMapChange} />
+        </div>
+        <Room sensors={sensors} showHeatMap={showHeatMap}/>
       </div>
     );
   }
