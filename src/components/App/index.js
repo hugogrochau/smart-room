@@ -4,8 +4,6 @@ import { BASE_TOPIC, METHOD_REGEX } from '../../constants';
 
 import Room from '../Room';
 
-import './App.css';
-
 class App extends Component {
   constructor(props) {
     super(props);

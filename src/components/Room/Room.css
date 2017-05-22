@@ -1,0 +1,9 @@
+.Room {
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+
+  
+  height: 100%;
+  width: 100%;
+}
