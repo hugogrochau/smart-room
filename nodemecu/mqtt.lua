@@ -5,6 +5,19 @@ local id = nil
 local key = ''..tmr.now()
 local position = 0
 
+local wificonf = {
+  ssid = "SSID",
+  pwd = "PWD",
+  save = false
+}
+
+function connectedToWifi()
+  print('Connected to wifi. IP: '..wifi.sta.getip())
+  m:connect('test.mosca.io', 1883, 0, 
+            connected,
+            function(client, reason) print('failed reason: '..reason) end)
+end
+
 function createUpdate(temperature)
   return '{ "id":"'..id..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
 end
@@ -39,6 +52,8 @@ function connected(c)
   timer:start()
 end 
 
-m:connect('test.mosca.io', 1883, 0, 
-          connected,
-          function(client, reason) print('failed reason: '..reason) end)
+print('Connecting to wifi...')
+wifi.sta.config(wificonf)
+wifi.setmode(wifi.STATION)
+while not wifi.sta.getip() do end 
+connectedToWifi()
