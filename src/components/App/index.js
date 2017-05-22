@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import mqtt from 'mqtt';
-import { BASE_TOPIC, METHOD_REGEX } from './constants';
+import { BASE_TOPIC, METHOD_REGEX } from '../../constants';
+
+import Room from '../Room';
+
 import './App.css';
 
 class App extends Component {
@@ -8,7 +11,10 @@ class App extends Component {
     super(props);
 
     this.state = {
-      sensors: [],
+      sensors: [
+        { temperature: 34, position: 0, id: 0 },
+        { temperature: 32, position: 1, id: 1 }
+      ],
     };
   }
 
@@ -56,13 +62,7 @@ class App extends Component {
     const { sensors } = this.state;
     return (
       <div className="App">
-        <ul>
-          {sensors.map(sensor => 
-            <li key={sensor.id}>
-              {`${sensor.position}: ${sensor.temperature}`}
-            </li>
-          )}
-        </ul>
+        <Room sensors={sensors} />
       </div>
     );
   }
