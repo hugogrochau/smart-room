@@ -11,7 +11,7 @@ class Room extends Component {
   static propTypes = {
     showHeatMap: PropTypes.bool,
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
-      id: PropTypes.number.isRequired,
+      key: PropTypes.number.isRequired,
       temperature: PropTypes.number.isRequired
      }))
   }
@@ -54,7 +54,7 @@ class Room extends Component {
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
         <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" />
         {sensors.map(sensor => 
-          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) }  key={sensor.id} />
+          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) }  key={sensor.key} />
         )}
       </div>
     );

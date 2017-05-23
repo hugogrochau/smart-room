@@ -1,8 +1,9 @@
-local m = mqtt.Client('hugo', 120)
 local BASE_TOPIC = 'hugogrochau/smart-room'
 
-local id = nil
-local key = ''..tmr.now()
+local registered = false
+math.randomseed(tmr.now())
+local key = ''..math.random(math.maxinteger)
+local m = mqtt.Client(key, 120)
 local position = 0
 
 local wificonf = {
@@ -13,23 +14,21 @@ local wificonf = {
 
 function publish(c, method, message)
   c:publish(BASE_TOPIC..'/'..method, message, 0, 0,
-            function() print('[Sent] Method: '..method..' | Message: '..message) end
-            )
+    function() print('[Sent] Method: '..method..' | Message: '..message) end
+  )
 end
 
 function messageHandler(c, topic, message)
   print('[Received] Topic: '..topic..' | Message: '..message)
   if topic == BASE_TOPIC..'/acceptRegistration' then
-    local receivedKey = message:match('([0-9]*) [0-9]*')
-    local receivedId = message:match('[0-9]* ([0-9]*)')
-    if id == nil and key == receivedKey then
-      id = receivedId
+    if not registered and key == message then
+      registered = true
     end
   end
 end
 
 function publishTemperature(c)
-  if id then
+  if registered then
     local temperature = adc.read(0)*(3.3/10.24)
     publish(c, 'update', createUpdate(temperature))
   end
@@ -55,7 +54,7 @@ function connectedToWifi()
 end
 
 function createUpdate(temperature)
-  return '{ "id":"'..id..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
+  return '{ "key":"'..key..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
 end
 
 
