@@ -11,23 +11,10 @@ local wificonf = {
   save = false
 }
 
-function connectedToWifi()
-  print('Connected to wifi. IP: '..wifi.sta.getip())
-  m:connect('test.mosca.io', 1883, 0, 
-            connected,
-            function(client, reason) print('failed reason: '..reason) end)
-end
-
-function createUpdate(temperature)
-  return '{ "id":"'..id..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
-end
-
-function publishTemperature(c)
-  if id then
-    local temperature = adc.read(0)*(3.3/10.24)
-    c:publish(BASE_TOPIC..'/update', createUpdate(temperature), 0, 0, 
-              function() print('sent update') end)
-  end
+function publish(c, method, message)
+  c:publish(BASE_TOPIC..'/'..method, message, 0, 0,
+            function() print('[Sent] Method: '..method..' | Message: '..message) end
+            )
 end
 
 function messageHandler(c, topic, message)
@@ -41,16 +28,36 @@ function messageHandler(c, topic, message)
   end
 end
 
-function connected(c)
+function publishTemperature(c)
+  if id then
+    local temperature = adc.read(0)*(3.3/10.24)
+    publish(c, 'update', createUpdate(temperature))
+  end
+end
+
+function connectedToMqtt(c)
   c:subscribe(BASE_TOPIC..'/acceptRegistration', 0)
+
   c:on('message', messageHandler)
-  c:publish(BASE_TOPIC..'/requestRegistration', '{"key":"'..key..'"}', 0, 0,
-            function() print('requested registration') end)
+
+  publish(c, 'requestRegistration', '{"key":"'..key..'"}')
 
   local timer = tmr.create()
   timer:register(1000, tmr.ALARM_AUTO, function() publishTemperature(c) end)
   timer:start()
 end 
+
+function connectedToWifi()
+  print('Connected to wifi. IP: '..wifi.sta.getip())
+  m:connect('test.mosca.io', 1883, 0, 
+            connectedtoMqtt,
+            function(client, reason) print('failed reason: '..reason) end)
+end
+
+function createUpdate(temperature)
+  return '{ "id":"'..id..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
+end
+
 
 print('Connecting to wifi...')
 wifi.sta.config(wificonf)
