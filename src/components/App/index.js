@@ -12,7 +12,7 @@ class App extends Component {
 
     this.state = {
       showHeatMap: false,
-      sensors: [
+      sensors: [ 
         { temperature: 20, position: 1, id: 14 },
         { temperature: 40, position: 15, id: 15 },
       ],
@@ -22,6 +22,24 @@ class App extends Component {
   publishMessage = (client, method, message) => {
     console.log(`[Sent] Method: ${method} | Message: ${message}`);
     client.publish(`${BASE_TOPIC}/${method}`, message);
+  }
+
+  updateSensors = (sensors, sensor) => {
+    let isNewSensor = true;
+
+    const updatedSensors = sensors.map((s) => {
+      if (s.id === sensor.id) {
+        isNewSensor = false;
+        return sensor;
+      }
+      return s;
+    });
+
+    if (isNewSensor) {
+      updatedSensors.push(sensor);
+    }
+
+    return updatedSensors;
   }
 
   handleMessage = (client) => (topic, message) => {
@@ -34,9 +52,8 @@ class App extends Component {
     switch (method) {
       // receive update from a sensor
       case 'update':
-        const sensors = this.state.sensors.slice();
-        sensors[id] = { ...parsedMessage };
-        // this.setState({ sensors });
+        const updatedSensors = this.updateSensors(this.state.sensors, parsedMessage);
+        this.setState({ sensors: updatedSensors });
         break;
       // a new sensor requests to be registered
       case 'requestRegistration':
