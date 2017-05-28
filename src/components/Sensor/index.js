@@ -26,7 +26,9 @@ export default class Sensor extends PureComponent {
 
     return (
       <div className="Sensor" style={{ marginLeft , marginTop, backgroundImage: `url(${sensorImage}` }}>
-        {Number(temperature).toFixed(2)}
+        <span className="SensorTemperature">
+          {Number(temperature).toFixed(2)}
+        </span>
         <SensorControls changeLedStatus={this.changeLedStatus} />
       </div>
     );
