@@ -1,16 +1,12 @@
 local BASE_TOPIC = 'hugogrochau/smart-room'
+local MQTT_SERVER = 'test.mosca.io'
+local wificonf = require('wificonf')
 
 local registered = false
 math.randomseed(tmr.now())
-local key = ''..math.random(math.maxinteger)
-local m = mqtt.Client(key, 120)
+local key = ''..math.random(2000000000)
+local m = mqtt.Client('smart-room-sensor', 120)
 local position = 0
-
-local wificonf = {
-  ssid = "SSID",
-  pwd = "PWD",
-  save = false
-}
 
 function publish(c, method, message)
   c:publish(BASE_TOPIC..'/'..method, message, 0, 0,
@@ -35,6 +31,7 @@ function publishTemperature(c)
 end
 
 function connectedToMqtt(c)
+  print('Connected to mqtt server: '..MQTT_SERVER)
   c:subscribe(BASE_TOPIC..'/acceptRegistration', 0)
 
   c:on('message', messageHandler)
@@ -48,7 +45,7 @@ end
 
 function connectedToWifi()
   print('Connected to wifi. IP: '..wifi.sta.getip())
-  m:connect('test.mosca.io', 1883, 0, 
+  m:connect(MQTT_SERVER, 1883, 0, 
             connectedtoMqtt,
             function(client, reason) print('failed reason: '..reason) end)
 end
@@ -61,5 +58,4 @@ end
 print('Connecting to wifi...')
 wifi.sta.config(wificonf)
 wifi.setmode(wifi.STATION)
-while not wifi.sta.getip() do end 
-connectedToWifi()
+tmr.create():alarm(10000, tmr.ALARM_SINGLE, connectedToWifi)
