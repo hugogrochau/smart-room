@@ -19,9 +19,9 @@ export default class App extends Component {
     };
   }
 
-  publishMessage = (client, method, message) => {
+  publishMessage = (method, message) => {
     console.log(`[Sent] Method: ${method} | Message: ${message}`);
-    client.publish(`${BASE_TOPIC}/${method}`, message);
+    this.client.publish(`${BASE_TOPIC}/${method}`, message);
   }
 
   updateSensors = (sensors, sensor) => {
@@ -42,7 +42,7 @@ export default class App extends Component {
     return updatedSensors;
   }
 
-  handleMessage = (client) => (topic, message) => {
+  handleMessage = (topic, message) => {
     // match method
     const method = topic.match(METHOD_REGEX)[1];
     const parsedMessage = JSON.parse(message);
@@ -57,7 +57,7 @@ export default class App extends Component {
         break;
       // a new sensor requests to be registered
       case 'requestRegistration':
-        this.publishMessage(client, 'acceptRegistration', id);
+        this.publishMessage('acceptRegistration', id);
         break;
       default:
     }
@@ -68,13 +68,13 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const client = mqtt.connect('mqtt://test.mosca.io');
-    client.on('connect', () => {
-      client.subscribe(`${BASE_TOPIC}/update`);
-      client.subscribe(`${BASE_TOPIC}/requestRegistration`);
+    this.client = mqtt.connect('mqtt://test.mosca.io');
+    this.client.on('connect', () => {
+      this.client.subscribe(`${BASE_TOPIC}/update`);
+      this.client.subscribe(`${BASE_TOPIC}/requestRegistration`);
     });
 
-    client.on('message', this.handleMessage(client));
+    this.client.on('message', this.handleMessage);
   }
   
   render() {
@@ -85,7 +85,7 @@ export default class App extends Component {
           <label htmlFor="ShowHeatMap">Show heatmap</label>
           <input id="ShowHeatMap" type="checkbox" onChange={this.handleShowHeatMapChange} />
         </div>
-        <Room sensors={sensors} showHeatMap={showHeatMap}/>
+        <Room sensors={sensors} showHeatMap={showHeatMap} publishMessage={this.publishMessage}/>
       </div>
     );
   }

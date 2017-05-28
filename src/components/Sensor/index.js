@@ -12,9 +12,14 @@ export default class Sensor extends PureComponent {
     temperature: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     marginLeft: PropTypes.string,
     marginTop: PropTypes.string,
+    publishMessage: PropTypes.func.isRequired
   }
 
-  onChange = (sensor) => this.props.onChange(sensor)
+  changeLedStatus = (led) => {
+    const { publishMessage, id } = this.props;
+    publishMessage('changeLedStatus', `${id} ${led}`);
+  }
+
 
   render() {
     const { temperature, marginLeft, marginTop } = this.props;
@@ -22,7 +27,7 @@ export default class Sensor extends PureComponent {
     return (
       <div className="Sensor" style={{ marginLeft , marginTop, backgroundImage: `url(${sensorImage}` }}>
         {Number(temperature).toFixed(2)}
-        <SensorControls />
+        <SensorControls changeLedStatus={this.changeLedStatus} />
       </div>
     );
   }

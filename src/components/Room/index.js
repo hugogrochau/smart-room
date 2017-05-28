@@ -13,7 +13,8 @@ export default class Room extends Component {
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       temperature: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-     })).isRequired
+     })).isRequired,
+    publishMessage: PropTypes.func.isRequired
   }
 
   sensorStyleByPosition = (position) => {
@@ -65,13 +66,13 @@ export default class Room extends Component {
   
   
   render() {
-    const { sensors } = this.props;
+    const { sensors, publishMessage } = this.props;
 
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
         <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" />
         {sensors.map(sensor => 
-          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) }  key={sensor.id} />
+          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) } publishMessage={publishMessage} key={sensor.id} />
         )}
       </div>
     );
