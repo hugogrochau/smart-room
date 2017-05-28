@@ -17,7 +17,7 @@ class Sensor extends Component {
 
     return (
       <div className="Sensor" style={{ marginLeft , marginTop, backgroundImage: `url(${sensorImage}` }}>
-        {temperature}
+        {Number(temperature).toFixed(2)}
       </div>
     );
   }

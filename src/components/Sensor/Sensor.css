@@ -12,6 +12,8 @@
 
   position: absolute;
 
+  user-select: none;
+
   width: 70px;
   height: 70px;
 }

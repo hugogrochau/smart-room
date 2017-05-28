@@ -41,7 +41,7 @@ class Room extends Component {
       this.heatMap.add([x, y, sensor.temperature]);
     });
 
-    this.heatMap.radius(30, 60);
+    this.heatMap.radius(150, 350);
     this.heatMap.draw();
   }
 
