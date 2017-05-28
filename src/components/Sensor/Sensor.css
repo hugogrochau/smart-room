@@ -16,4 +16,10 @@
 
   width: 70px;
   height: 70px;
+
+  padding: 0 30px;
+}
+
+.Sensor:hover .SensorControls {
+  display: block;
 }

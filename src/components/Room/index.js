@@ -64,19 +64,16 @@ export default class Room extends Component {
     const { showHeatMap } = this.props;
     if (showHeatMap) {
       this.drawHeatMap();
-    } else {
-      this.heatMap.clear();
-      this.heatMap.draw();
     }
   }
   
   
   render() {
-    const { sensors, publishMessage } = this.props;
+    const { sensors, publishMessage, showHeatMap } = this.props;
 
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
-        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" />
+        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" style={{display: showHeatMap ? 'block' : 'none'}} />
         {sensors.map(sensor => 
           <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) } publishMessage={publishMessage} key={sensor.id} />
         )}
