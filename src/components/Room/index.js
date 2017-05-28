@@ -7,7 +7,7 @@ import positionMap from './positionMap';
 import roomImage from './L458.png';
 import './Room.css';
 
-class Room extends Component {
+export default class Room extends Component {
   static propTypes = {
     showHeatMap: PropTypes.bool,
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
@@ -77,5 +77,3 @@ class Room extends Component {
     );
   }
 }
-
-export default Room;

@@ -1,0 +1,16 @@
+.SensorControls {
+  width: 80px;
+
+  font-size: 10px;
+
+  line-height: 15px;
+
+  position: absolute;
+
+  background-color: white;
+  border: 1px black solid;
+
+  padding: 20px;
+
+  z-index: 3;
+}
