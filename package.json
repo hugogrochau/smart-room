@@ -15,10 +15,6 @@
   ],
   "author": "Hugo Grochau",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hugogrochau/smart-room/issues"
-  },
-  "homepage": "https://github.com/hugogrochau/smart-room#readme",
   "dependencies": {
     "mqtt": "^2.7.2",
     "react": "^15.5.4",
