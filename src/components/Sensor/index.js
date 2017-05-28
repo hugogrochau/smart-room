@@ -6,8 +6,8 @@ import './Sensor.css';
 
 class Sensor extends Component {
   static propTypes = {
-    id: PropTypes.number.isRequired,
-    temperature: PropTypes.number,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    temperature: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     marginLeft: PropTypes.string,
     marginTop: PropTypes.string,
   }

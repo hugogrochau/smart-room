@@ -36,7 +36,7 @@ class App extends Component {
       case 'update':
         const sensors = this.state.sensors.slice();
         sensors[id] = { ...parsedMessage };
-        this.setState({ sensors });
+        // this.setState({ sensors });
         break;
       // a new sensor requests to be registered
       case 'requestRegistration':

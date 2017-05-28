@@ -11,9 +11,9 @@ class Room extends Component {
   static propTypes = {
     showHeatMap: PropTypes.bool,
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
-      id: PropTypes.number.isRequired,
-      temperature: PropTypes.number.isRequired
-     }))
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      temperature: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+     })).isRequired
   }
 
   sensorStyleByPosition = (position) => {
@@ -25,7 +25,7 @@ class Room extends Component {
   }
 
   drawHeatMap = () => {
-    const { showHeatMap, sensors } = this.props;
+    const { sensors } = this.props;
     const { _width: heatmapWidth, _height: heatmapHeight } = this.heatMap;
     const { width: canvasWidth, height: canvasHeight } = this.canvas.getBoundingClientRect();
     const sensorWidth = 70;
@@ -33,25 +33,34 @@ class Room extends Component {
     const widthRatio = heatmapWidth / canvasWidth;
     const heightRatio = heatmapHeight / canvasHeight;
     this.heatMap.clear();
-    if (showHeatMap) {
-      sensors.forEach(sensor => {
-        const positions = positionMap[sensor.position];
-        const x = (positions.left + canvasWidth / 2 + sensorWidth / 2) * widthRatio;
-        const y = (positions.top + canvasHeight / 2 + sensorHeight / 2) * heightRatio;
-        this.heatMap.add([x, y, sensor.temperature]);
-      });
-    }
+
+    sensors.forEach(sensor => {
+      const positions = positionMap[sensor.position];
+      const x = (positions.left + canvasWidth / 2 + sensorWidth / 2) * widthRatio;
+      const y = (positions.top + canvasHeight / 2 + sensorHeight / 2) * heightRatio;
+      this.heatMap.add([x, y, sensor.temperature]);
+    });
+
     this.heatMap.radius(30, 60);
     this.heatMap.draw();
   }
 
   componentDidMount() {
+    const { showHeatMap } = this.props;
     this.heatMap = simpleheat(this.canvas);
-    this.drawHeatMap();
+    if (showHeatMap) {
+      this.drawHeatMap();
+    }
   }
 
   componentDidUpdate() {
-    this.drawHeatMap();
+    const { showHeatMap } = this.props;
+    if (showHeatMap) {
+      this.drawHeatMap();
+    } else {
+      this.heatMap.clear();
+      this.heatMap.draw();
+    }
   }
   
   
@@ -60,7 +69,7 @@ class Room extends Component {
 
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
-        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" onClick={(e) => console.log(e.clientX)} />
+        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" />
         {sensors.map(sensor => 
           <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) }  key={sensor.id} />
         )}
