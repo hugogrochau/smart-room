@@ -72,11 +72,13 @@ function messageHandler(c, topic, message)
   if topic == BASE_TOPIC..'/changeLedStatus' then
     local receivedId = message:match('([0-9]*) [0-9]*')
     local receivedLed = message:match('[0-9]* ([0-9]*)')
-    if receivedLed == '1' then
-      led1.toggle()
-    end
-    if receivedLed == '2' then
-      led2.toggle()
+    if receivedId == id then
+      if receivedLed == '1' then
+        led1.toggle()
+      end
+      if receivedLed == '2' then
+        led2.toggle()
+      end
     end
   end
 end
