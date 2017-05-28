@@ -15,12 +15,14 @@ local newLed = function (port, speed)
   end
 
   local stop = function()
+    gpio.write(port, gpio.LOW)
     timer:stop()
   end
 
   local toggle = function()
     local on = timer:state()
     if on then
+      gpio.write(port, gpio.LOW)
       timer:stop()
     else
       timer:start()
