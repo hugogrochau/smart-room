@@ -3,7 +3,7 @@ local MQTT_SERVER = 'test.mosca.io'
 local wificonf = require('wificonf')
 local newButton = require('button')
 local newLed = require('led')
-local DEBOUNCE_TIME = 500
+local DEBOUNCE_TIME = 250
 local LED_SPEED = 500
 
 
