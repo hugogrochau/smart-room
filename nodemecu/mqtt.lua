@@ -2,15 +2,23 @@ local BASE_TOPIC = 'hugogrochau/smart-room'
 local MQTT_SERVER = 'test.mosca.io'
 local wificonf = require('wificonf')
 local newButton = require('button')
-local DEBOUNCE_TIME = 500000
+local newLed = require('led')
+local DEBOUNCE_TIME = 500
+local LED_SPEED = 500
 
-local registered = false
+
 local client = nil
 math.randomseed(tmr.now())
 local id = ''..math.random(2000000000)
 local m = mqtt.Client(id, 120)
+
 local position = 0
 local temperature = 0
+local registered = false
+
+local led1 = newLed(3, LED_SPEED)
+local led2 = newLed(6, LED_SPEED)
+led1.start()
 
 -- utils 
 function publish(method, message)
