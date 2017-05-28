@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       showHeatMap: false,
       sensors: [
-        { temperature: 20, position: 14, id: 14 },
+        { temperature: 20, position: 1, id: 14 },
         { temperature: 40, position: 15, id: 15 },
       ],
     };
