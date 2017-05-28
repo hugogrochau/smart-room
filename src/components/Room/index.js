@@ -18,6 +18,12 @@ export default class Room extends Component {
   }
 
   sensorStyleByPosition = (position) => {
+    if (position < 0) {
+      position = 0;
+    }
+    if (position > 15) {
+      position = 15;
+    }
     const margins = positionMap[position];
     return {
       marginLeft: `${margins.left}px`,

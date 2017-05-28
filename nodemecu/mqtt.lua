@@ -83,8 +83,10 @@ end
 
 function changePosition(delta)
   return function()
-    position = position + delta
-    publish('update', createUpdate())
+    if position + delta >= 0 and position + delta <= 15 then
+      position = position + delta
+      publish('update', createUpdate())
+    end
   end
 end
 -- end callbacks
