@@ -28,19 +28,19 @@ class App extends Component {
     // match method
     const method = topic.match(METHOD_REGEX)[1];
     const parsedMessage = JSON.parse(message);
-    const { key } = parsedMessage;
+    const { id } = parsedMessage;
     console.log(`[Received] Method: ${method} | Message:`, parsedMessage);
 
     switch (method) {
       // receive update from a sensor
       case 'update':
         const sensors = this.state.sensors.slice();
-        sensors[key] = { ...parsedMessage };
+        sensors[id] = { ...parsedMessage };
         this.setState({ sensors });
         break;
       // a new sensor requests to be registered
       case 'requestRegistration':
-        this.publishMessage(client, 'acceptRegistration', key);
+        this.publishMessage(client, 'acceptRegistration', id);
         break;
       default:
     }
