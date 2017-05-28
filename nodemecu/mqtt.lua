@@ -1,28 +1,32 @@
 local BASE_TOPIC = 'hugogrochau/smart-room'
 local MQTT_SERVER = 'test.mosca.io'
 local wificonf = require('wificonf')
+local newButton = require('button')
+local DEBOUNCE_TIME = 500000
 
 local registered = false
+local client = nil
 math.randomseed(tmr.now())
 local id = ''..math.random(2000000000)
 local m = mqtt.Client(id, 120)
 local position = 0
+local temperature = 0
 
 -- utils 
-function publish(c, method, message)
-  c:publish(BASE_TOPIC..'/'..method, message, 0, 0,
+function publish(method, message)
+  client:publish(BASE_TOPIC..'/'..method, message, 0, 0,
     function() print('[Sent] Method: '..method..' | Message: '..message) end
   )
 end
 
-function createUpdate(temperature)
+function createUpdate()
   return '{ "id":"'..id..'", "temperature":"'..temperature..'", "position":"'..position..'"}'
 end
 
-function publishTemperature(c)
+function publishTemperature()
   if registered then
-    local temperature = adc.read(0)*(3.3/10.24)
-    publish(c, 'update', createUpdate(temperature))
+    temperature = adc.read(0)*(3.3/10.24)
+    publish('update', createUpdate())
   end
 end
 -- end utils
@@ -32,18 +36,22 @@ function connectedToWifi()
   print('Connected to wifi. IP: '..wifi.sta.getip())
   m:connect(MQTT_SERVER, 1883, 0, 
             connectedToMqtt,
-            function(client, reason) print('failed reason: '..reason) end)
+            function(c, reason) print('failed reason: '..reason) end)
 end
 
 function connectedToMqtt(c)
+  client = c
   print('Connected to MQTT server. host: '..MQTT_SERVER)
-  c:subscribe(BASE_TOPIC..'/acceptRegistration', 0)
-  c:on('message', messageHandler)
-  publish(c, 'requestRegistration', '{"id":"'..id..'"}')
+  client:subscribe(BASE_TOPIC..'/acceptRegistration', 0)
+  client:on('message', messageHandler)
+  publish('requestRegistration', '{"id":"'..id..'"}')
 
   local timer = tmr.create()
-  timer:register(1000, tmr.ALARM_AUTO, function() publishTemperature(c) end)
+  timer:register(1000, tmr.ALARM_AUTO, publishTemperature)
   timer:start()
+
+  newButton(1, DEBOUNCE_TIME, changePosition(1))
+  newButton(2, DEBOUNCE_TIME, changePosition(-1))
 end 
 
 function messageHandler(c, topic, message)
@@ -52,6 +60,13 @@ function messageHandler(c, topic, message)
     if not registered and id == message then
       registered = true
     end
+  end
+end
+
+function changePosition(delta)
+  return function()
+    position = position + delta
+    publish('update', createUpdate())
   end
 end
 -- end callbacks
