@@ -18,7 +18,6 @@ local registered = false
 
 local led1 = newLed(3, LED_SPEED)
 local led2 = newLed(6, LED_SPEED)
-led1.start()
 
 -- utils 
 function publish(method, message)
@@ -51,6 +50,7 @@ function connectedToMqtt(c)
   client = c
   print('Connected to MQTT server. host: '..MQTT_SERVER)
   client:subscribe(BASE_TOPIC..'/acceptRegistration', 0)
+  client:subscribe(BASE_TOPIC..'/changeLedStatus', 0)
   client:on('message', messageHandler)
   publish('requestRegistration', '{"id":"'..id..'"}')
 
@@ -67,6 +67,16 @@ function messageHandler(c, topic, message)
   if topic == BASE_TOPIC..'/acceptRegistration' then
     if not registered and id == message then
       registered = true
+    end
+  end
+  if topic == BASE_TOPIC..'/changeLedStatus' then
+    local receivedId = message:match('([0-9]*) [0-9]*')
+    local receivedLed = message:match('[0-9]* ([0-9]*)')
+    if receivedLed == '1' then
+      led1.toggle()
+    end
+    if receivedLed == '2' then
+      led2.toggle()
     end
   end
 end

@@ -18,6 +18,15 @@ local newLed = function (port, speed)
     timer:stop()
   end
 
+  local toggle = function()
+    local on = timer:state()
+    if on then
+      timer:stop()
+    else
+      timer:start()
+    end
+  end
+
 
   -- init --
   gpio.mode(port, gpio.OUTPUT)
@@ -27,7 +36,8 @@ local newLed = function (port, speed)
   -- exports --
   return {
     start = start,
-    stop = stop
+    stop = stop,
+    toggle = toggle
   }
 end
 
