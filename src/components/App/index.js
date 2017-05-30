@@ -6,41 +6,55 @@ import Room from '../Room';
 
 import './App.css';
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       showHeatMap: false,
-      sensors: [
-        { temperature: 20, position: 14, key: 14 },
-        { temperature: 40, position: 15, key: 15 },
-      ],
+      sensors: [],
     };
   }
 
-  publishMessage = (client, method, message) => {
+  publishMessage = (method, message) => {
     console.log(`[Sent] Method: ${method} | Message: ${message}`);
-    client.publish(`${BASE_TOPIC}/${method}`, message);
+    this.client.publish(`${BASE_TOPIC}/${method}`, message);
   }
 
-  handleMessage = (client) => (topic, message) => {
+  updateSensors = (sensors, sensor) => {
+    let isNewSensor = true;
+
+    const updatedSensors = sensors.map((s) => {
+      if (s.id === sensor.id) {
+        isNewSensor = false;
+        return sensor;
+      }
+      return s;
+    });
+
+    if (isNewSensor) {
+      updatedSensors.push(sensor);
+    }
+
+    return updatedSensors;
+  }
+
+  handleMessage = (topic, message) => {
     // match method
     const method = topic.match(METHOD_REGEX)[1];
     const parsedMessage = JSON.parse(message);
-    const { key } = parsedMessage;
+    const { id } = parsedMessage;
     console.log(`[Received] Method: ${method} | Message:`, parsedMessage);
 
     switch (method) {
       // receive update from a sensor
       case 'update':
-        const sensors = this.state.sensors.slice();
-        sensors[key] = { ...parsedMessage };
-        this.setState({ sensors });
+        const updatedSensors = this.updateSensors(this.state.sensors, parsedMessage);
+        this.setState({ sensors: updatedSensors });
         break;
       // a new sensor requests to be registered
       case 'requestRegistration':
-        this.publishMessage(client, 'acceptRegistration', key);
+        this.publishMessage('acceptRegistration', id);
         break;
       default:
     }
@@ -51,13 +65,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const client = mqtt.connect('mqtt://test.mosca.io');
-    client.on('connect', () => {
-      client.subscribe(`${BASE_TOPIC}/update`);
-      client.subscribe(`${BASE_TOPIC}/requestRegistration`);
+    this.client = mqtt.connect('mqtt://test.mosca.io');
+    this.client.on('connect', () => {
+      this.client.subscribe(`${BASE_TOPIC}/update`);
+      this.client.subscribe(`${BASE_TOPIC}/requestRegistration`);
     });
 
-    client.on('message', this.handleMessage(client));
+    this.client.on('message', this.handleMessage);
   }
   
   render() {
@@ -68,10 +82,8 @@ class App extends Component {
           <label htmlFor="ShowHeatMap">Show heatmap</label>
           <input id="ShowHeatMap" type="checkbox" onChange={this.handleShowHeatMapChange} />
         </div>
-        <Room sensors={sensors} showHeatMap={showHeatMap}/>
+        <Room sensors={sensors} showHeatMap={showHeatMap} publishMessage={this.publishMessage}/>
       </div>
     );
   }
 }
-
-export default App;

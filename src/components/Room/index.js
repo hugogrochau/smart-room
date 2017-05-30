@@ -7,16 +7,23 @@ import positionMap from './positionMap';
 import roomImage from './L458.png';
 import './Room.css';
 
-class Room extends Component {
+export default class Room extends Component {
   static propTypes = {
     showHeatMap: PropTypes.bool,
     sensors: PropTypes.arrayOf(PropTypes.shape({ 
-      key: PropTypes.number.isRequired,
-      temperature: PropTypes.number.isRequired
-     }))
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      temperature: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+     })).isRequired,
+    publishMessage: PropTypes.func.isRequired
   }
 
   sensorStyleByPosition = (position) => {
+    if (position < 0) {
+      position = 0;
+    }
+    if (position > 15) {
+      position = 15;
+    }
     const margins = positionMap[position];
     return {
       marginLeft: `${margins.left}px`,
@@ -25,40 +32,52 @@ class Room extends Component {
   }
 
   drawHeatMap = () => {
-    const { showHeatMap, sensors } = this.props;
+    const { sensors } = this.props;
+    const { _width: heatmapWidth, _height: heatmapHeight } = this.heatMap;
+    const { width: canvasWidth, height: canvasHeight } = this.canvas.getBoundingClientRect();
+    const sensorWidth = 70;
+    const sensorHeight = 70;
+    const widthRatio = heatmapWidth / canvasWidth;
+    const heightRatio = heatmapHeight / canvasHeight;
     this.heatMap.clear();
-    if (showHeatMap) {
-      sensors.forEach(sensor => {
-        const positions = positionMap[sensor.position];
-        this.heatMap.add([(positions.left + 320) / 1.9, (positions.top + 400) / 5, sensor.temperature]);
-      });
-    }
-    this.heatMap.radius(30, 100);
+
+    sensors.forEach(sensor => {
+      const positions = positionMap[sensor.position];
+      const x = (positions.left + canvasWidth / 2 + sensorWidth / 2) * widthRatio;
+      const y = (positions.top + canvasHeight / 2 + sensorHeight / 2) * heightRatio;
+      this.heatMap.add([x, y, sensor.temperature]);
+    });
+
+    this.heatMap.radius(150, 350);
     this.heatMap.draw();
   }
 
   componentDidMount() {
+    const { showHeatMap } = this.props;
     this.heatMap = simpleheat(this.canvas);
-    this.drawHeatMap();
+    if (showHeatMap) {
+      this.drawHeatMap();
+    }
   }
 
   componentDidUpdate() {
-    this.drawHeatMap();
+    const { showHeatMap } = this.props;
+    if (showHeatMap) {
+      this.drawHeatMap();
+    }
   }
   
   
   render() {
-    const { sensors } = this.props;
+    const { sensors, publishMessage, showHeatMap } = this.props;
 
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
-        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" />
+        <canvas ref={(canvas) => this.canvas = canvas} className="HeatMap" style={{display: showHeatMap ? 'block' : 'none'}} />
         {sensors.map(sensor => 
-          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) }  key={sensor.key} />
+          <Sensor { ...sensor } { ...this.sensorStyleByPosition(sensor.position) } publishMessage={publishMessage} key={sensor.id} />
         )}
       </div>
     );
   }
 }
-
-export default Room;

@@ -1,5 +1,4 @@
 .Sensor {
-  color: red;
 
   background-repeat: no-repeat;
   background-size: 70px 70px;
@@ -12,6 +11,19 @@
 
   position: absolute;
 
+  user-select: none;
+
   width: 70px;
   height: 70px;
+
+  padding: 0 30px;
+}
+
+.Sensor .SensorTemperature {
+  color: red;
+  background-color: black;
+}
+
+.Sensor:hover .SensorControls {
+  display: block;
 }
