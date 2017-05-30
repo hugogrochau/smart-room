@@ -10,7 +10,7 @@ The purpose of this project is to monitor and control a room's temperature and n
 * Another will be deployed in the middle of the room
 * All sensors will report their temperatures
 
-## Interace:
+## Interface:
 The web interface will show:
 * Where each sensor is located in the room and their respective temperatures
 * The average temperature of the room
