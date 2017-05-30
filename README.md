@@ -2,11 +2,11 @@
 A platform for monitoring and controlling a set of ESP8266 chips deployed in a room
 
 # Description
-The purpose of this project is to monitor and control a room's temperature and number of occupants.
+The purpose of this project is to monitor and control a room's temperature and number of occupants
 
 ## Chips:
-* One chip will be deployed next to the door, to sense and report when someone enters or leaves the room.
-* Another will be deployed with an IR LED to control the AC unit 
+* One chip will be deployed next to the door, to sense and report when someone enters or leaves the room
+* Another will be deployed with an IR LED to control the AC unit
 * Another will be deployed in the middle of the room
 * All sensors will report their temperatures
 
