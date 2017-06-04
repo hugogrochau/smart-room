@@ -26,5 +26,6 @@ It will allow for:
 # Hardware
 * 3 x ESP8266
 * 2 x Motion detectors
-* 1 x IR LED
+* 1 x IR blaster
+* 1 x IR receiver
 * 1 x Beeper
