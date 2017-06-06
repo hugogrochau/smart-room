@@ -31,12 +31,13 @@ It will allow for:
 * 1 x Beeper
 
 # Resources:
-https://www.hackster.io/BuddyC/wifi-ir-blaster-af6bca
-https://github.com/markszabo/IRremoteESP8266
-https://github.com/mdhiggins/ESP8266-HTTP-IR-Blaster
-https://github.com/esp8266/Arduino
-http://osoyoo.com/2016/12/08/nodemcu-mqtt-ir-remoter/
-http://www.instructables.com/id/Easiest-ESP8266-Learning-IR-Remote-Control-Via-WIF/
+* https://www.hackster.io/BuddyC/wifi-ir-blaster-af6bca
+* https://github.com/markszabo/IRremoteESP8266
+* https://github.com/mdhiggins/ESP8266-HTTP-IR-Blaster
+* https://github.com/esp8266/Arduino
+* http://osoyoo.com/2016/12/08/nodemcu-mqtt-ir-remoter/
+* http://www.instructables.com/id/Easiest-ESP8266-Learning-IR-Remote-Control-Via-WIF/
 
-http://www.instructables.com/id/IOT-Motion-Detector-With-Email-Notification-W-Node/
-http://www.instructables.com/id/IoT-Motion-Detector-With-NodeMCU-and-BLYNK/
+
+* http://www.instructables.com/id/IOT-Motion-Detector-With-Email-Notification-W-Node/
+* http://www.instructables.com/id/IoT-Motion-Detector-With-NodeMCU-and-BLYNK/
