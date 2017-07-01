@@ -5,6 +5,7 @@ local wificonf = require('wificonf')
 
 local PIR1 = 5
 local PIR2 = 6
+local DHT = 1
 local PIR1Active = 0
 local PIR2Active = 0
 local persons = 0
@@ -16,6 +17,14 @@ function publishUpdate()
   client:publish(TOPIC, updateString, 0, 0,
     function() print('Update: '..updateString) end
   )
+end
+
+function readDHT()
+  status, temperature, humidity = dht.read(DHT)
+  if status == dht.OK then
+    print("DHT Read. Temperature: "..temperature..". Humidity: "..humidity..".")
+    publishUpdate()
+  end
 end
 -- end utils
 
@@ -30,6 +39,10 @@ end
 function connectedToMqtt(c)
   client = c
   print('Connected to MQTT server. Host: '..MQTT_SERVER)
+
+  local timer = tmr.create()
+  timer:register(2000, tmr.ALARM_AUTO, readDHT)
+  timer:start()
 
   gpio.mode(PIR1, gpio.INT)
   gpio.mode(PIR2, gpio.INT)
