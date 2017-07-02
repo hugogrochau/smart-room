@@ -8,18 +8,18 @@ import './Room.css';
 
 export default class Room extends Component {
   static propTypes = {
-    publishMessage: PropTypes.func.isRequired,
+    personsLimit: PropTypes.number.isRequired,
+    temperatureThreshold: PropTypes.number.isRequired,
     temperature: PropTypes.number.isRequired,
     humidity: PropTypes.number.isRequired,
-    persons: PropTypes.number.isRequired
+    persons: PropTypes.number.isRequired,
+    publishMessage: PropTypes.func.isRequired
   }
 
   render() {
-    const { temperature, humidity, persons, publishMessage } = this.props;
-
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
-        <Status temperature={temperature} humidity={humidity} persons={persons} className="Status" />
+        <Status { ...this.props } className="Status" />
       </div>
     );
   }

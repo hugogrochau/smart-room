@@ -57,7 +57,7 @@ export default class App extends Component {
 
     return (
       <div className="App">
-        <Room publishMessage={this.publishMessage} { ...roomData }/>
+        <Room publishMessage={this.publishMessage} { ...roomData } { ...settings }/>
         <Controls onChangePersonsLimit={this.onChangePersonsLimit} onChangeTemperatureThreshold={this.onChangeTemperatureThreshold} { ...settings } className="Controls" />
       </div>
     );
