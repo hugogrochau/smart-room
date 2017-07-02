@@ -1,0 +1,31 @@
+.AC {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  margin-left: -100px;
+  margin-top: -360px;
+
+  z-index: 3;
+}
+
+
+.ACStatus-on, .ACStatus-off {
+  display: inline-block;
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ACStatus-on {
+  background-color: green;
+}
+
+.ACStatus-off {
+  background-color: red;
+}
+
+.ACButton {
+
+}
