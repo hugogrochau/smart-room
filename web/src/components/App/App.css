@@ -1,3 +1,8 @@
+body {
+  color: rgba(0, 0, 0, 0.75);
+  line-height: 1.75;
+}
+
 .Controls {
   position: fixed;
   left: 50%;
@@ -6,8 +11,7 @@
   width: 200px;
   height: 400px;
 
-  background-color: white;
-  border: 1px black solid;
+  border: 1px rgba(0, 0, 0, 0.75) solid;
 
   padding: 20px;
   margin-left: -800px;
