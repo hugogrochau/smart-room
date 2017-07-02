@@ -53,12 +53,12 @@ export default class App extends Component {
   }
 
   render() {
-    const { roomData } = this.state;
+    const { roomData, settings } = this.state;
 
     return (
       <div className="App">
         <Room publishMessage={this.publishMessage} { ...roomData }/>
-        <Controls onChangePersonsLimit={this.onChangePersonsLimit} onChangeTemperatureThreshold={this.onChangeTemperatureThreshold} className="Controls" />
+        <Controls onChangePersonsLimit={this.onChangePersonsLimit} onChangeTemperatureThreshold={this.onChangeTemperatureThreshold} { ...settings } className="Controls" />
       </div>
     );
   }
