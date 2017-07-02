@@ -3,23 +3,7 @@
   background-position: center;
   position: absolute;
 
-  
+
   height: 100%;
   width: 100%;
-}
-
-.HeatMap {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-
-  width: 550px;
-  margin-left: -275px;
-
-  height: 760px;
-  margin-top: -380px;
-
-  opacity: 0.8;
-
-  z-index: 2;
 }
