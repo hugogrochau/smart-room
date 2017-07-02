@@ -18,7 +18,8 @@
   "dependencies": {
     "mqtt": "^2.7.2",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-icons": "^2.2.5"
   },
   "devDependencies": {
     "react-scripts": "1.0.2"
