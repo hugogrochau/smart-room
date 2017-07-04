@@ -1,4 +1,4 @@
-local TOPIC = 'hugogrochau/smart-room'
+local TOPIC = 'hugogrochau/smart-room/update'
 local MQTT_SERVER = 'test.mosca.io'
 local m = mqtt.Client('pir', 120)
 local wificonf = require('wificonf')
@@ -10,21 +10,22 @@ local PIR1Active = 0
 local PIR2Active = 0
 local persons = 0
 local temperature = 0
+local humidity = 0
 
 -- utils
 function publishUpdate()
-  local updateString = '{ "temperature":"'..temperature..'", "persons":"'..persons..'"}'
+  local updateString = '{ "temperature":'..temperature..', "persons":'..persons..', "humidity":'..humidity..'}'
   client:publish(TOPIC, updateString, 0, 0,
     function() print('Update: '..updateString) end
   )
 end
 
 function readDHT()
-  status, temperature, humidity = dht.read(DHT)
-  if status == dht.OK then
-    print("DHT Read. Temperature: "..temperature..". Humidity: "..humidity..".")
-    publishUpdate()
-  end
+  -- status, temperature, humidity = dht.read(DHT)
+  -- if status == dht.OK then
+  --   print("DHT Read. Temperature: "..temperature..". Humidity: "..humidity..".")
+  --   publishUpdate()
+  -- end
 end
 -- end utils
 
@@ -40,9 +41,9 @@ function connectedToMqtt(c)
   client = c
   print('Connected to MQTT server. Host: '..MQTT_SERVER)
 
-  local timer = tmr.create()
-  timer:register(2000, tmr.ALARM_AUTO, readDHT)
-  timer:start()
+  -- local timer = tmr.create()
+  -- timer:register(2000, tmr.ALARM_AUTO, readDHT)
+  -- timer:start()
 
   gpio.mode(PIR1, gpio.INT)
   gpio.mode(PIR2, gpio.INT)
