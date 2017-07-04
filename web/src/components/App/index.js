@@ -37,11 +37,11 @@ export default class App extends Component {
   }
 
   onChangePersonsLimit = (personsLimit) => {
-    this.setState({ settings: { personsLimit }});
+    this.setState({ settings: { ...this.state.settings, personsLimit }});
   }
 
   onChangeTemperatureThreshold = (temperatureThreshold) => {
-    this.setState({ settings: { temperatureThreshold }});
+    this.setState({ settings: { ...this.state.settings, temperatureThreshold }});
   }
 
   componentDidMount() {
