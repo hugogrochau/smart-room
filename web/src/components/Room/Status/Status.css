@@ -1,3 +1,21 @@
+.Status {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  list-style: none;
+
+  width: 100px;
+
+  border: 1px rgba(0, 0, 0, 0.75) solid;
+
+  padding: 20px;
+  margin-left: -480px;
+  margin-top: -420px;
+
+  z-index: 3;
+}
+
 .Status-error {
   color: red;
 }

@@ -17,12 +17,12 @@ export default class Status extends PureComponent {
   }
 
   render() {
-    const { temperature, humidity, persons, personsLimit, temperatureThreshold, className } = this.props;
+    const { temperature, humidity, persons, personsLimit, temperatureThreshold } = this.props;
     const userClass = (persons > personsLimit) ? 'Status-error' : 'Status-ok';
     return (
-      <ul className={className}>
-        <li><TiThermometer /> {temperature}/{temperatureThreshold}</li>
-        <li><FaTint /> {humidity}</li>
+      <ul className="Status">
+        <li><TiThermometer /> {temperature}/{temperatureThreshold} °C</li>
+        <li><FaTint /> {humidity} %</li>
         <li className={userClass}><FaUser /> {persons}/{personsLimit}</li>
       </ul>
     );

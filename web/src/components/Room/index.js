@@ -21,7 +21,7 @@ export default class Room extends Component {
     const { acOn } = this.props;
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
-        <Status { ...this.props } className="Status" />
+        <Status { ...this.props } />
         <AC status={acOn}/>
       </div>
     );
