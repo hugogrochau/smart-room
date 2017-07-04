@@ -21,17 +21,17 @@ function publishUpdate()
 end
 
 function readDHT()
-  -- status, temperature, humidity = dht.read(DHT)
-  -- if status == dht.OK then
-  --   print("DHT Read. Temperature: "..temperature..". Humidity: "..humidity..".")
-  --   publishUpdate()
-  -- end
+  status, temperature, humidity = dht.read(DHT)
+  if status == dht.OK then
+    print("DHT Read. Temperature: "..temperature..". Humidity: "..humidity..".")
+    publishUpdate()
+  end
 end
 -- end utils
 
 -- callbacks
 function connectedToWifi()
-  print('Connected to wifi. IP: '..wifi.sta.getip())
+  print('Connected to wifi. IP: ', wifi.sta.getip())
   m:connect(MQTT_SERVER, 1883, 0,
             connectedToMqtt,
             function(c, reason) print('Failed connecting to mqtt server. Reason: '..reason) end)
@@ -41,9 +41,9 @@ function connectedToMqtt(c)
   client = c
   print('Connected to MQTT server. Host: '..MQTT_SERVER)
 
-  -- local timer = tmr.create()
-  -- timer:register(2000, tmr.ALARM_AUTO, readDHT)
-  -- timer:start()
+  local timer = tmr.create()
+  timer:register(2000, tmr.ALARM_AUTO, readDHT)
+  timer:start()
 
   gpio.mode(PIR1, gpio.INT)
   gpio.mode(PIR2, gpio.INT)
