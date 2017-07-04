@@ -39,14 +39,14 @@ export default class App extends Component {
   onUpdate = (_, message) => {
     const roomData = JSON.parse(message);
     const { temperature, persons } = roomData;
-    const { roomData: { temperature: prevTemperature, persons: prevPersons }, settings: { temperatureThreshold } } = this.state;
-    let acOn;
+    const { roomData: { persons: prevPersons }, settings: { temperatureThreshold } } = this.state;
+    let acOn = this.state.acOn;
     let personAnimation = false;
 
-    if (prevTemperature < temperatureThreshold && temperature > temperatureThreshold) {
+    if (temperature > temperatureThreshold && !acOn) {
       this.publishMessage('ac', 'on');
       acOn = true;
-    } else if (prevTemperature > temperatureThreshold && temperature < temperatureThreshold) {
+    } else if (temperature < temperatureThreshold && acOn)  {
       this.publishMessage('ac', 'off');
       acOn = false;
     }
@@ -67,10 +67,12 @@ export default class App extends Component {
   }
 
   onChangePersonsLimit = (personsLimit) => {
+    personsLimit = parseInt(personsLimit, 10);
     this.setState({ settings: { ...this.state.settings, personsLimit }});
   }
 
   onChangeTemperatureThreshold = (temperatureThreshold) => {
+    temperatureThreshold = parseFloat(temperatureThreshold);
     this.setState({ settings: { ...this.state.settings, temperatureThreshold }});
   }
 
