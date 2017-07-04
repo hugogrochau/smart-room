@@ -5,6 +5,8 @@ import TiThermometer from 'react-icons/lib/ti/thermometer';
 import FaTint from 'react-icons/lib/fa/tint';
 import FaUser from 'react-icons/lib/fa/user';
 
+import './Status.css';
+
 export default class Status extends PureComponent {
   static propTypes = {
     personsLimit: PropTypes.number.isRequired,
@@ -16,11 +18,12 @@ export default class Status extends PureComponent {
 
   render() {
     const { temperature, humidity, persons, personsLimit, temperatureThreshold, className } = this.props;
+    const userClass = (persons > personsLimit) ? 'Status-error' : 'Status-ok';
     return (
       <ul className={className}>
         <li><TiThermometer /> {temperature}/{temperatureThreshold}</li>
         <li><FaTint /> {humidity}</li>
-        <li><FaUser /> {persons}/{personsLimit}</li>
+        <li className={userClass}><FaUser /> {persons}/{personsLimit}</li>
       </ul>
     );
   }
