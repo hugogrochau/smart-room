@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import mqtt from 'mqtt';
+
+import FaArrowRight from 'react-icons/lib/fa/arrow-right';
+import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
+
 import { BASE_TOPIC } from '../../constants';
 
 import Room from '../Room';
@@ -23,6 +27,7 @@ export default class App extends Component {
         temperatureThreshold: 30,
       },
       acOn: false,
+      personAnimation: false
     };
   }
 
@@ -33,7 +38,32 @@ export default class App extends Component {
 
   onUpdate = (_, message) => {
     const roomData = JSON.parse(message);
-    this.setState({ roomData });
+    const { temperature, persons } = roomData;
+    const { roomData: { temperature: prevTemperature, persons: prevPersons }, settings: { temperatureThreshold } } = this.state;
+    let acOn;
+    let personAnimation = false;
+
+    if (prevTemperature < temperatureThreshold && temperature > temperatureThreshold) {
+      this.publishMessage('ac', 'on');
+      acOn = true;
+    } else if (prevTemperature > temperatureThreshold && temperature < temperatureThreshold) {
+      this.publishMessage('ac', 'off');
+      acOn = false;
+    }
+
+    if (persons > prevPersons) {
+      personAnimation = 'enter';
+    } else if (persons < prevPersons) {
+      personAnimation = 'leave';
+    }
+
+    if (personAnimation) {
+      setTimeout(() => {
+        this.setState({ personAnimation: false });
+      }, 2000);
+    }
+
+    this.setState({ roomData, acOn, personAnimation });
   }
 
   onChangePersonsLimit = (personsLimit) => {
@@ -52,26 +82,16 @@ export default class App extends Component {
     this.client.on('message', this.onUpdate);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { roomData: { temperature }, settings: { temperatureThreshold } } = this.state;
-    const { roomData: { temperature: prevTemperature } } = prevState;
-
-    if (prevTemperature < temperatureThreshold && temperature > temperatureThreshold) {
-      this.publishMessage('ac', 'on');
-      this.setState({ acOn: true });
-    } else if (prevTemperature > temperatureThreshold && temperature < temperatureThreshold) {
-      this.publishMessage('ac', 'off');
-      this.setState({ acOn: false });
-    }
-  }
-
   render() {
-    const { roomData, settings, acOn } = this.state;
+    const { roomData, settings, acOn, personAnimation } = this.state;
 
     return (
       <div className="App">
         <Room acOn={acOn} { ...roomData } { ...settings }/>
         <Controls onChangePersonsLimit={this.onChangePersonsLimit} onChangeTemperatureThreshold={this.onChangeTemperatureThreshold} { ...settings } className="Controls" />
+        {personAnimation &&
+          <div className={`PersonAnimation-${personAnimation}`}>{personAnimation === 'enter' ? <FaArrowLeft /> : <FaArrowRight />}</div>
+        }
       </div>
     );
   }

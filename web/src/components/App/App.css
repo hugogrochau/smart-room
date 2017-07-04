@@ -19,3 +19,21 @@ body {
 
   z-index: 3;
 }
+
+.PersonAnimation-enter, .PersonAnimation-leave {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  font-size: 150px;
+  margin-left: 300px;
+  margin-top: 10px;
+}
+
+.PersonAnimation-enter {
+  color: green;
+}
+
+.PersonAnimation-leave {
+  color: red;
+}
