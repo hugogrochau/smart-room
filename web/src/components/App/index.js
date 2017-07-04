@@ -52,12 +52,25 @@ export default class App extends Component {
     this.client.on('message', this.onUpdate);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { roomData: { temperature }, settings: { temperatureThreshold } } = this.state;
+    const { roomData: { temperature: prevTemperature } } = prevState;
+
+    if (prevTemperature < temperatureThreshold && temperature > temperatureThreshold) {
+      this.publishMessage('ac', 'on');
+      this.setState({ acOn: true });
+    } else if (prevTemperature > temperatureThreshold && temperature < temperatureThreshold) {
+      this.publishMessage('ac', 'off');
+      this.setState({ acOn: false });
+    }
+  }
+
   render() {
     const { roomData, settings, acOn } = this.state;
 
     return (
       <div className="App">
-        <Room publishMessage={this.publishMessage} acOn={acOn} { ...roomData } { ...settings }/>
+        <Room acOn={acOn} { ...roomData } { ...settings }/>
         <Controls onChangePersonsLimit={this.onChangePersonsLimit} onChangeTemperatureThreshold={this.onChangeTemperatureThreshold} { ...settings } className="Controls" />
       </div>
     );

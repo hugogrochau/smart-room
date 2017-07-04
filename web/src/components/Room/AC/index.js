@@ -5,18 +5,16 @@ import './AC.css';
 
 export default class AC extends PureComponent {
   static propTypes = {
-    onToggle: PropTypes.func.isRequired,
     status: PropTypes.bool.isRequired
   };
 
   render() {
 
-    const { onToggle, status, className } = this.props;
+    const { status, className } = this.props;
+    const statusString = status ? 'on' : 'off';
+
     return (
-      <div className={`${className} AC`} >
-        <div className={`ACStatus-${status ? 'on' :'off'}`} />
-        <button className="ACButton" onClick={onToggle} />
-      </div>
+      <div className={`${className} AC-${statusString}`} />
     );
   }
 }

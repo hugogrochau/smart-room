@@ -14,8 +14,7 @@ export default class Room extends Component {
     temperature: PropTypes.number.isRequired,
     humidity: PropTypes.number.isRequired,
     persons: PropTypes.number.isRequired,
-    publishMessage: PropTypes.func.isRequired,
-    acOn: PropTypes.bool.isRequired,
+    acOn: PropTypes.bool.isRequired
   }
 
   render() {
@@ -23,7 +22,7 @@ export default class Room extends Component {
     return (
       <div className="Room" style={{backgroundImage: `url(${roomImage})`}}>
         <Status { ...this.props } className="Status" />
-        <AC onToggle={() => ''} status={acOn}/>
+        <AC status={acOn}/>
       </div>
     );
   }
