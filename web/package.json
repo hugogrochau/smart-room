@@ -1,6 +1,6 @@
 {
   "name": "smart-room",
-  "description": "A platform for monitoring and controlling a set of ESP8266 devices deployed in a room",
+  "description": "A platform for monitoring and controlling a smart room",
   "version": "0.1.0",
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
     "smart",
     "room"
   ],
+  "homepage": "http://hugo.grochau.com/smart-room",
   "author": "Hugo Grochau",
   "license": "MIT",
   "dependencies": {
