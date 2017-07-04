@@ -34,6 +34,7 @@ It will allow for:
 PIR:
 * PIR 5v power and 3.3v data
 * Use trigger to detect
+* https://s-media-cache-ak0.pinimg.com/originals/8c/a4/cb/8ca4cbbad2532389362bb8b5fc88df17.png
 
 IR
 * Use resistor + transistor to convert from 3.3v to 5.0
